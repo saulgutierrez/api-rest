@@ -30,10 +30,16 @@
 
             // Request from register
             if(array_filter($arrayRoutes)[2] == "register") {
-                // Evaluate GET method
-                if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "GET") {
+                // Evaluate POST method
+                if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST") {
+                    $data = array (
+                        "name" => $_POST['name'],
+                        "surname" => $_POST['surname'],
+                        "email" => $_POST['email']
+                    );
+
                     $clients = new ClientsController();
-                    $clients->create();
+                    $clients->create($data);
                 }
             }
         } else {

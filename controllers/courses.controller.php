@@ -1,8 +1,10 @@
 <?php
     class CoursesController {
         public function index () {
+            // Fetch all records
+            $courses = CoursesModel::index("cursos");
             $json = array(
-                "details" => "You're in courses"
+                "details" => $courses
             );
         
             echo json_encode($json, true);
