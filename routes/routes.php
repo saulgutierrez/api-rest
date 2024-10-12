@@ -20,8 +20,18 @@
 
                 // Evaluate GET/POST method
                 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST") {
+
+                    // Capture courses data
+                    $data = array (
+                        "title" => $_POST['title'],
+                        "description" => $_POST['description'],
+                        "instructor" => $_POST['instructor'],
+                        "image" => $_POST['image'],
+                        "price" => $_POST['price']
+                    );
+
                     $courses = new CoursesController();
-                    $courses->create();
+                    $courses->create($data);
                 } else if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "GET") {
                     $courses = new CoursesController();
                     $courses->index();

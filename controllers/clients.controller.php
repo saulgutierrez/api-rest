@@ -8,6 +8,7 @@
                     "status" => 404,
                     "details" => "Error. Enter only letters."
                 );
+                
                 echo json_encode($json, true);
                 return;
             }
@@ -18,6 +19,7 @@
                     "status" => 404,
                     "details" => "Error. Enter only letters."
                 );
+
                 echo json_encode($json, true);
                 return;
             }
@@ -28,6 +30,7 @@
                     "status" => 404,
                     "details" => "Error. Email is not formatted correctly"
                 );
+
                 echo json_encode($json, true);
                 return;
             }
@@ -43,6 +46,7 @@
                         "status" => 404,
                         "details" => "Email is duplicated"
                     );
+
                     echo json_encode($json, true);
                     return;
                 }
@@ -71,6 +75,7 @@
                     "client_id" => $clientID,
                     "client_key" => $clientKey
                 );
+
                 echo json_encode($json, true);
                 return;
             }
