@@ -17,7 +17,6 @@
             
             // Request from courses
             if(array_filter($arrayRoutes)[2] == "courses") {
-
                 // Evaluate GET/POST method
                 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "POST") {
 
@@ -32,6 +31,7 @@
 
                     $courses = new CoursesController();
                     $courses->create($data);
+
                 } else if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "GET") {
                     $courses = new CoursesController();
                     $courses->index();
@@ -53,19 +53,26 @@
                 }
             }
         } else {
-            // Check for the course index
+            // Check for the course index, for edit or delete a course, using id parameter
             if (array_filter($arrayRoutes)[2] == "courses"  && is_numeric(array_filter($arrayRoutes)[3])) {
-                // Evaluate GET method
+                // Evaluate GET method for getting info for a course
                 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "GET") {
                     $courses = new CoursesController();
                     $courses->show(array_filter($arrayRoutes)[3]);
                 }
-                // Evaluate PUT method
+                // Evaluate PUT method, for edit info of a course
                 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "PUT") {
+                    // Getting data
+                    $data = array();
+
+                    // Capture all data into the form, and parse it with parse_str function
+                    parse_str(file_get_contents('php://input'), $data);
+                    
                     $editCourse = new CoursesController();
-                    $editCourse->update(array_filter($arrayRoutes)[3]);
+                    // Take off the data into the form towards the update function
+                    $editCourse->update(array_filter($arrayRoutes)[3], $data);
                 }
-                // Evaluate DEKETE method
+                // Evaluate DELETE method
                 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] == "DELETE") {
                     $deleteCourse = new CoursesController();
                     $deleteCourse->delete(array_filter($arrayRoutes)[3]);
