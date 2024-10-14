@@ -68,5 +68,18 @@
             $statement->close();
             $statement = null;
         }
+
+        // Delete an specific record
+        static public function delete($table, $id) {
+            $statement = Connection::connect()->prepare("DELETE FROM $table WHERE id = :id");
+            $statement->bindParam(":id", $id, PDO::PARAM_INT);
+            if ($statement->execute()) {
+                return "ok";
+            } else {
+                print_r(Connection::connect()->errorInfo());
+            }
+            $statement->close();
+            $statement = null;
+        }
     }
 ?>

@@ -202,11 +202,36 @@
         }
 
         public function delete ($id) {
-            $json = array(
-                "details" => "Course ID " .$id. " deleted successfully"
-            );
-        
-            echo json_encode($json, true);
+            // Validate credentials
+            $clients = ClientsModel::index("clientes");
+            // Validate auth credentials, capturate from API Auth screen
+            if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
+                foreach ($clients as $key => $valueClient) {
+                    // Search for user credentials in database
+                    if (base64_encode($_SERVER['PHP_AUTH_USER'].":".$_SERVER['PHP_AUTH_PW']) == base64_encode($valueClient["id_cliente"].":".$valueClient['llave_secreta'])) {
+                        // Validate creator id
+                        $course = CoursesModel::show("cursos", $id);
+                        // Search for the creator id
+                        foreach ($course as $key => $valueCourse) {
+                            // Compare course id with id_creador field in clients table
+                            if ($valueCourse->id_creador == $valueClient["id"]) {
+                                // Bring the data into the model
+                                $delete = CoursesModel::delete("cursos", $id);
+
+                                if ($delete == "ok") {
+                                    $json = array(
+                                        "status" => 200,
+                                        "details" => "Course deleted successfully"
+                                    );
+                                
+                                    echo json_encode($json, true);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 ?>
