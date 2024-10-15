@@ -4,9 +4,14 @@
 
     class CoursesModel {
         // Show all records
-        static public function index ($table1, $table2) {
-            // $table1 = "cursos", "$table2 = "clientes"
-            $statement = Connection::connect()->prepare("SELECT $table1.id, $table1.titulo, $table1.descripcion, $table1.instructor, $table1.precio, $table1.id_creador, $table2.nombre, $table2.apellido FROM $table1 INNER JOIN $table2 ON $table1.id_creador = $table2.id");
+        static public function index ($table1, $table2, $quantity, $from) {
+            if ($quantity != null) {
+                // If we had get parameters, means we need pagination
+                $statement = Connection::connect()->prepare("SELECT $table1.id, $table1.titulo, $table1.descripcion, $table1.instructor, $table1.precio, $table1.id_creador, $table2.nombre, $table2.apellido FROM $table1 INNER JOIN $table2 ON $table1.id_creador = $table2.id LIMIT $from, $quantity");    
+            } else {
+                // $table1 = "cursos", "$table2 = "clientes"
+                $statement = Connection::connect()->prepare("SELECT $table1.id, $table1.titulo, $table1.descripcion, $table1.instructor, $table1.precio, $table1.id_creador, $table2.nombre, $table2.apellido FROM $table1 INNER JOIN $table2 ON $table1.id_creador = $table2.id");    
+            }            
             $statement->execute();
             # Return properties of the connection
             return $statement->fetchAll(PDO::FETCH_CLASS);

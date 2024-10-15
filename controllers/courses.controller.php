@@ -1,6 +1,6 @@
 <?php
     class CoursesController {
-        public function index () {
+        public function index ($page) {
 
             // Get all data into clientes table
             $clients = ClientsModel::index("clientes");
@@ -10,9 +10,23 @@
                 // Search for user credentials in database use $clients variable, that contains all database clients
                 foreach($clients as  $key => $value) {
                     if (base64_encode($_SERVER['PHP_AUTH_USER'].":".$_SERVER['PHP_AUTH_PW']) == base64_encode($value['id_cliente'].":".$value['llave_secreta'])) {
-                        // Fetch all records
-                        // Added multiple selection
-                        $courses = CoursesModel::index("cursos", "clientes");
+                        // If we have pagination, it means if GET variable is settled
+                        if ($page != null) {
+                            $quantity = 10;
+                            // (1 - 1) * 10 = 0
+                            // From 0 to 9 = $quantity = 10
+                            // (2 - 1) * 10 = 10
+                            // From 10 to 19 = $quantity = 10
+                            // ...
+                            // ...
+                            $from = ($page - 1) * $quantity;
+                            $courses = CoursesModel::index("cursos", "clientes", $quantity, $from);    
+                        } else {
+                            // Fetch all records
+                            // Added multiple selection
+                            $courses = CoursesModel::index("cursos", "clientes", null, null);
+                        }
+
                         $json = array(
                             "details" => $courses
                         );
@@ -50,7 +64,7 @@
                 }
 
                 // Validate that the title or description is not repeated
-                $courses = CoursesModel::index("cursos", "clientes");
+                $courses = CoursesModel::index("cursos", "clientes", null, null);
 
                 foreach ($courses as $key => $value) {
                     // Comparate title and description
