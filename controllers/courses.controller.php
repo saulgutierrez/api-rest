@@ -11,7 +11,8 @@
                 foreach($clients as  $key => $value) {
                     if (base64_encode($_SERVER['PHP_AUTH_USER'].":".$_SERVER['PHP_AUTH_PW']) == base64_encode($value['id_cliente'].":".$value['llave_secreta'])) {
                         // Fetch all records
-                        $courses = CoursesModel::index("cursos");
+                        // Added multiple selection
+                        $courses = CoursesModel::index("cursos", "clientes");
                         $json = array(
                             "details" => $courses
                         );
@@ -49,7 +50,7 @@
                 }
 
                 // Validate that the title or description is not repeated
-                $courses = CoursesModel::index("cursos");
+                $courses = CoursesModel::index("cursos", "clientes");
 
                 foreach ($courses as $key => $value) {
                     // Comparate title and description
@@ -110,7 +111,7 @@
                     // Search for user credentials in database
                     if (base64_encode($_SERVER['PHP_AUTH_USER'].":".$_SERVER['PHP_AUTH_PW']) == base64_encode($valueClient["id_cliente"].":".$valueClient['llave_secreta'])) {
                         // Show all courses with an specific id
-                        $courses = CoursesModel::show("cursos", $id);
+                        $courses = CoursesModel::show("cursos", "clientes", $id);
 
                         if (!empty($courses)) {
                             $json = array(
@@ -159,7 +160,7 @@
                         }
 
                         // Validate creator id, avoid to edit any course who isn´t belongs to him
-                        $course = CoursesModel::show("cursos", $id);
+                        $course = CoursesModel::show("cursos", "clientes", $id);
                         foreach ($course as $key => $valueCourse) {
                             // Compare if id_creador field in course table is equal to client id
                             // That means the course belongs to the client
@@ -210,7 +211,7 @@
                     // Search for user credentials in database
                     if (base64_encode($_SERVER['PHP_AUTH_USER'].":".$_SERVER['PHP_AUTH_PW']) == base64_encode($valueClient["id_cliente"].":".$valueClient['llave_secreta'])) {
                         // Validate creator id
-                        $course = CoursesModel::show("cursos", $id);
+                        $course = CoursesModel::show("cursos", "clientes", $id);
                         // Search for the creator id
                         foreach ($course as $key => $valueCourse) {
                             // Compare course id with id_creador field in clients table

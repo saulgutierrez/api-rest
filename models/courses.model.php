@@ -4,8 +4,9 @@
 
     class CoursesModel {
         // Show all records
-        static public function index ($table) {
-            $statement = Connection::connect()->prepare("SELECT * FROM $table");
+        static public function index ($table1, $table2) {
+            // $table1 = "cursos", "$table2 = "clientes"
+            $statement = Connection::connect()->prepare("SELECT $table1.id, $table1.titulo, $table1.descripcion, $table1.instructor, $table1.precio, $table1.id_creador, $table2.nombre, $table2.apellido FROM $table1 INNER JOIN $table2 ON $table1.id_creador = $table2.id");
             $statement->execute();
             # Return properties of the connection
             return $statement->fetchAll(PDO::FETCH_CLASS);
@@ -37,8 +38,8 @@
         }
 
         // Show an specific record
-        static public function show ($table, $id) {
-            $statement = Connection::connect()->prepare("SELECT * FROM $table WHERE id = :id");
+        static public function show ($table1, $table2, $id) {
+            $statement = Connection::connect()->prepare("SELECT $table1.id, $table1.titulo, $table1.descripcion, $table1.instructor, $table1.precio, $table1.id_creador, $table2.nombre, $table2.apellido FROM $table1 INNER JOIN $table2 ON $table1.id_creador = $table2.id WHERE $table1.id = :id");
             $statement->bindParam(":id", $id, PDO::PARAM_INT);
             $statement->execute();
             # Return properties of the connection
